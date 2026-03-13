@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Become a Builder</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #fffbf0;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    header h1 {
+      font-size: 2.8rem;
+      background: linear-gradient(135deg, #f97316, #ec4899, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    header p {
+      color: #78716c;
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      box-shadow: 4px 4px 0px #e2e8f0;
+      border: 2px solid #e2e8f0;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px #e2e8f0;
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1c1917;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: #57534e;
+      line-height: 1.5;
+    }
+
+    .card:nth-child(3n+1) { border-color: #fdba74; box-shadow: 4px 4px 0px #fdba74; }
+    .card:nth-child(3n+2) { border-color: #f9a8d4; box-shadow: 4px 4px 0px #f9a8d4; }
+    .card:nth-child(3n+3) { border-color: #c4b5fd; box-shadow: 4px 4px 0px #c4b5fd; }
+
+    .card:nth-child(3n+1):hover { box-shadow: 6px 6px 0px #fdba74; }
+    .card:nth-child(3n+2):hover { box-shadow: 6px 6px 0px #f9a8d4; }
+    .card:nth-child(3n+3):hover { box-shadow: 6px 6px 0px #c4b5fd; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Become a Builder 🛠️</h1>
+    <p>Concepts I've learned by building things</p>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card-icon">📄</div>
+      <h2>HTML</h2>
+      <p>The skeleton of a webpage. Tags describe what things <em>are</em> — a heading, a card, a button. The browser reads them and builds the page.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">🎨</div>
+      <h2>CSS</h2>
+      <p>The styling layer. CSS controls how things <em>look</em> — colors, fonts, spacing, and layout.</p>
+    </div>
+
+    <div class="card">
+  <div class="card-icon">🚢</div>
+  <h2>Shipping</h2>
+  <p>Making something real and putting it somewhere people can see it. The opposite of keeping it on your computer forever.</p>
+</div>
+  </div>
+</body>
+</html>
