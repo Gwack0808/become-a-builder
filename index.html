@@ -142,6 +142,32 @@
     .card:nth-child(3n+2) .card-front { border-color: #f9a8d4; box-shadow: 4px 4px 0px #f9a8d4; }
     .card:nth-child(3n+3) .card-front { border-color: #c4b5fd; box-shadow: 4px 4px 0px #c4b5fd; }
 
+    .search {
+      display: block;
+      margin: 0 auto 2rem;
+      width: 100%;
+      max-width: 400px;
+      padding: 0.65rem 1.2rem;
+      font-size: 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 2rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .search:focus {
+      border-color: #f97316;
+      box-shadow: 3px 3px 0px #fdba74;
+    }
+
+    .no-results {
+      text-align: center;
+      color: #a8a29e;
+      font-size: 1rem;
+      padding: 2rem;
+      grid-column: 1 / -1;
+    }
+
     .hint {
       text-align: center;
       margin-top: 2rem;
@@ -156,6 +182,8 @@
     <p>Concepts I've learned by building things</p>
     <div class="counter">Cards revealed: <span id="flip-count">0</span> of <span id="total-count"></span></div>
   </header>
+
+  <input class="search" id="search" type="text" placeholder="Search concepts..." />
 
   <!-- The grid starts empty — JavaScript fills it in -->
   <div class="grid" id="grid"></div>
@@ -214,16 +242,13 @@
 
     // Grab the elements we need
     const grid = document.getElementById('grid');
+    const searchInput = document.getElementById('search');
     const countDisplay = document.getElementById('flip-count');
     const totalDisplay = document.getElementById('total-count');
     let flippedCount = 0;
 
-    // Write the total count dynamically — no hardcoded numbers
     totalDisplay.textContent = concepts.length;
 
-    // createCard takes one concept object and returns HTML as a string.
-    // The backtick string (template literal) lets you drop variables
-    // directly into HTML using ${ }
     function createCard(concept) {
       return `
         <div class="card">
@@ -242,13 +267,27 @@
       `;
     }
 
-    // Loop over every concept and add its card to the grid
-    concepts.forEach(function(concept) {
-      grid.innerHTML = grid.innerHTML + createCard(concept);
-    });
+    // renderCards takes an array and builds the grid from it.
+    // It can receive ALL concepts, or a filtered subset — same function either way.
+    function renderCards(list) {
+      if (list.length === 0) {
+        grid.innerHTML = '<p class="no-results">No concepts match that search.</p>';
+        return;
+      }
 
-    // Now that the cards exist in the DOM, attach click listeners
-    const cards = document.querySelectorAll('.card');
+      grid.innerHTML = list.map(createCard).join('');
+
+      // Re-attach click listeners every time cards are re-rendered
+      flippedCount = 0;
+      countDisplay.textContent = 0;
+
+      document.querySelectorAll('.card').forEach(function(card) {
+        card.addEventListener('click', function() {
+          flipCard(card);
+          updateCounter();
+        });
+      });
+    }
 
     function flipCard(card) {
       card.classList.toggle('flipped');
@@ -261,7 +300,8 @@
 
     function updateCounter() {
       countDisplay.textContent = flippedCount;
-      if (flippedCount === cards.length) {
+      const visibleCards = document.querySelectorAll('.card');
+      if (flippedCount === visibleCards.length) {
         showCongrats();
       }
     }
@@ -270,12 +310,24 @@
       document.querySelector('.hint').textContent = '🎉 You\'ve revealed all the concepts!';
     }
 
-    cards.forEach(function(card) {
-      card.addEventListener('click', function() {
-        flipCard(card);
-        updateCounter();
+    // The 'input' event fires on every keystroke — not just when you press Enter
+    searchInput.addEventListener('input', function() {
+
+      // .value reads what's currently typed in the box
+      // .toLowerCase() makes the search case-insensitive
+      const searchTerm = searchInput.value.toLowerCase();
+
+      // .filter() loops over the array and keeps only items where the
+      // function returns true. It returns a brand new array.
+      const matches = concepts.filter(function(concept) {
+        return concept.name.toLowerCase().includes(searchTerm);
       });
+
+      renderCards(matches);
     });
+
+    // Render all cards on first load
+    renderCards(concepts);
   </script>
 
 </body>
