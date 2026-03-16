@@ -33,6 +33,23 @@
       font-size: 1.1rem;
     }
 
+    .counter {
+      display: inline-block;
+      margin-top: 1rem;
+      background: white;
+      border: 2px solid #fdba74;
+      border-radius: 2rem;
+      padding: 0.4rem 1.2rem;
+      font-size: 0.95rem;
+      color: #78716c;
+      box-shadow: 3px 3px 0px #fdba74;
+    }
+
+    .counter span {
+      font-weight: 700;
+      color: #f97316;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -149,6 +166,7 @@
   <header>
     <h1>Become a Builder 🛠️</h1>
     <p>Concepts I've learned by building things</p>
+    <div class="counter">Cards revealed: <span id="flip-count">0</span> of 6</div>
   </header>
 
   <div class="grid">
@@ -242,19 +260,28 @@
   <p class="hint">👆 Click any card to flip it</p>
 
   <script>
-    // querySelector grabs the first matching element
-    // querySelectorAll grabs ALL matching elements — returns a list
+    // A variable stores data. let means the value can change later.
+    let flippedCount = 0;
+
+    // Grab the <span> where we'll display the number
+    const countDisplay = document.getElementById('flip-count');
 
     const cards = document.querySelectorAll('.card');
 
-    // Loop over every card and attach a click listener
     cards.forEach(function(card) {
       card.addEventListener('click', function() {
-
-        // classList lets you add, remove, or toggle CSS classes
-        // toggle adds the class if it's missing, removes it if it's there
         card.classList.toggle('flipped');
 
+        // If the card is now flipped, count goes up.
+        // If it was flipped back, count goes down.
+        if (card.classList.contains('flipped')) {
+          flippedCount = flippedCount + 1;
+        } else {
+          flippedCount = flippedCount - 1;
+        }
+
+        // Update the page with the new number
+        countDisplay.textContent = flippedCount;
       });
     });
   </script>
