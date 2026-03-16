@@ -260,28 +260,45 @@
   <p class="hint">👆 Click any card to flip it</p>
 
   <script>
-    // A variable stores data. let means the value can change later.
     let flippedCount = 0;
-
-    // Grab the <span> where we'll display the number
     const countDisplay = document.getElementById('flip-count');
-
     const cards = document.querySelectorAll('.card');
+
+    // A function is a named, reusable block of code.
+    // Define it once, call it whenever you need it.
+
+    function flipCard(card) {
+      card.classList.toggle('flipped');
+
+      if (card.classList.contains('flipped')) {
+        flippedCount = flippedCount + 1;
+      } else {
+        flippedCount = flippedCount - 1;
+      }
+    }
+
+    function updateCounter() {
+      countDisplay.textContent = flippedCount;
+
+      // Functions can call other functions
+      if (flippedCount === cards.length) {
+        showCongrats();
+      }
+    }
+
+    // cards.length is how many cards exist — no magic number needed
+    function showCongrats() {
+      const hint = document.querySelector('.hint');
+      hint.textContent = '🎉 You\'ve revealed all the concepts!';
+    }
 
     cards.forEach(function(card) {
       card.addEventListener('click', function() {
-        card.classList.toggle('flipped');
 
-        // If the card is now flipped, count goes up.
-        // If it was flipped back, count goes down.
-        if (card.classList.contains('flipped')) {
-          flippedCount = flippedCount + 1;
-        } else {
-          flippedCount = flippedCount - 1;
-        }
+        // Now the click handler just calls functions — clean and readable
+        flipCard(card);
+        updateCounter();
 
-        // Update the page with the new number
-        countDisplay.textContent = flippedCount;
       });
     });
   </script>
