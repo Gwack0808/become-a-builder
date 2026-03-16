@@ -41,18 +41,76 @@
       margin: 0 auto;
     }
 
+    /* --- FLIP CARD SETUP ---
+       Each card is a container that holds two faces.
+       perspective makes the 3D rotation look realistic. */
     .card {
-      background: white;
-      border-radius: 1.25rem;
-      padding: 1.5rem;
-      box-shadow: 4px 4px 0px #e2e8f0;
-      border: 2px solid #e2e8f0;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      perspective: 1000px;
+      height: 200px;
+      cursor: pointer;
     }
 
-    .card:hover {
+    /* The inner wrapper is what actually rotates.
+       transform-style: preserve-3d lets both faces exist in 3D space.
+       transition animates the rotation smoothly. */
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.5s ease;
+      border-radius: 1.25rem;
+    }
+
+    /* When JS adds the "flipped" class, rotate 180 degrees */
+    .card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    /* Both faces share this base style */
+    .card-front,
+    .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden; /* hides the face when it's rotated away */
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      border: 2px solid #e2e8f0;
+      box-shadow: 4px 4px 0px #e2e8f0;
+    }
+
+    .card-front {
+      background: white;
+    }
+
+    /* The back starts rotated 180deg so it's hidden until flipped */
+    .card-back {
+      background: #1c1917;
+      color: white;
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .card-back .back-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #a8a29e;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-back p {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #e7e5e4;
+    }
+
+    /* Hover effect — only on front */
+    .card:hover .card-front {
       transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px #e2e8f0;
     }
 
     .card-icon {
@@ -60,26 +118,31 @@
       margin-bottom: 0.75rem;
     }
 
-    .card h2 {
+    .card-front h2 {
       font-size: 1.1rem;
       font-weight: 700;
       color: #1c1917;
       margin-bottom: 0.5rem;
     }
 
-    .card p {
+    .card-front p {
       font-size: 0.95rem;
       color: #57534e;
       line-height: 1.5;
     }
 
-    .card:nth-child(3n+1) { border-color: #fdba74; box-shadow: 4px 4px 0px #fdba74; }
-    .card:nth-child(3n+2) { border-color: #f9a8d4; box-shadow: 4px 4px 0px #f9a8d4; }
-    .card:nth-child(3n+3) { border-color: #c4b5fd; box-shadow: 4px 4px 0px #c4b5fd; }
+    /* Color accents per card */
+    .card:nth-child(3n+1) .card-front { border-color: #fdba74; box-shadow: 4px 4px 0px #fdba74; }
+    .card:nth-child(3n+2) .card-front { border-color: #f9a8d4; box-shadow: 4px 4px 0px #f9a8d4; }
+    .card:nth-child(3n+3) .card-front { border-color: #c4b5fd; box-shadow: 4px 4px 0px #c4b5fd; }
 
-    .card:nth-child(3n+1):hover { box-shadow: 6px 6px 0px #fdba74; }
-    .card:nth-child(3n+2):hover { box-shadow: 6px 6px 0px #f9a8d4; }
-    .card:nth-child(3n+3):hover { box-shadow: 6px 6px 0px #c4b5fd; }
+    /* Hint at the bottom of the page */
+    .hint {
+      text-align: center;
+      margin-top: 2rem;
+      color: #a8a29e;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
@@ -89,35 +152,112 @@
   </header>
 
   <div class="grid">
+
     <div class="card">
-      <div class="card-icon">📄</div>
-      <h2>HTML</h2>
-      <p>The skeleton of a webpage. Tags describe what things <em>are</em> — a heading, a card, a button. The browser reads them and builds the page.</p>
+      <div class="card-inner">
+        <div class="card-front">
+          <div class="card-icon">📄</div>
+          <h2>HTML</h2>
+          <p>The skeleton of a webpage. Tags describe what things <em>are</em> — a heading, a card, a button.</p>
+        </div>
+        <div class="card-back">
+          <div class="back-label">Fun fact</div>
+          <p>HTML was invented by Tim Berners-Lee in 1991. The first webpage is still live at info.cern.ch.</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="card-icon">🎨</div>
-      <h2>CSS</h2>
-      <p>The styling layer. CSS controls how things <em>look</em> — colors, fonts, spacing, and layout.</p>
+      <div class="card-inner">
+        <div class="card-front">
+          <div class="card-icon">🎨</div>
+          <h2>CSS</h2>
+          <p>The styling layer. CSS controls how things <em>look</em> — colors, fonts, spacing, and layout.</p>
+        </div>
+        <div class="card-back">
+          <div class="back-label">Fun fact</div>
+          <p>CSS was proposed in 1994. Before it existed, styling was done with HTML attributes directly — one reason old websites look so chaotic.</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="card-icon">🚢</div>
-      <h2>Shipping</h2>
-      <p>Making something real and putting it somewhere people can see it. The opposite of keeping it on your computer forever.</p>
+      <div class="card-inner">
+        <div class="card-front">
+          <div class="card-icon">🚢</div>
+          <h2>Shipping</h2>
+          <p>Making something real and putting it somewhere people can see it. The opposite of keeping it on your computer forever.</p>
+        </div>
+        <div class="card-back">
+          <div class="back-label">Fun fact</div>
+          <p>"Ship it" comes from the physical act of shipping software on disks. Now it just means: make it live.</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="card-icon">🌐</div>
-      <h2>GitHub Pages</h2>
-      <p>A free service that takes files in a GitHub repo and serves them as a real website. No server required.</p>
+      <div class="card-inner">
+        <div class="card-front">
+          <div class="card-icon">🌐</div>
+          <h2>GitHub Pages</h2>
+          <p>A free service that takes files in a GitHub repo and serves them as a real website. No server required.</p>
+        </div>
+        <div class="card-back">
+          <div class="back-label">Fun fact</div>
+          <p>GitHub Pages has hosted millions of free sites since 2008 — portfolios, docs, games, and tools built by people just like you.</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="card-icon">📸</div>
-      <h2>Git</h2>
-      <p>Version control. Every commit is a saved snapshot of your code. Push sends it to GitHub — and live to the world.</p>
+      <div class="card-inner">
+        <div class="card-front">
+          <div class="card-icon">📸</div>
+          <h2>Git</h2>
+          <p>Version control. Every commit is a saved snapshot of your code. Push sends it to GitHub — and live to the world.</p>
+        </div>
+        <div class="card-back">
+          <div class="back-label">Fun fact</div>
+          <p>Git was created by Linus Torvalds in 2005 — the same person who created the Linux operating system.</p>
+        </div>
+      </div>
     </div>
+
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-front">
+          <div class="card-icon">⚡</div>
+          <h2>JavaScript</h2>
+          <p>The behavior layer. JS makes pages respond to the user — clicks, inputs, animations, and live updates.</p>
+        </div>
+        <div class="card-back">
+          <div class="back-label">Fun fact</div>
+          <p>JavaScript was written in just 10 days in 1995. Despite the name, it has nothing to do with Java.</p>
+        </div>
+      </div>
+    </div>
+
   </div>
+
+  <p class="hint">👆 Click any card to flip it</p>
+
+  <script>
+    // querySelector grabs the first matching element
+    // querySelectorAll grabs ALL matching elements — returns a list
+
+    const cards = document.querySelectorAll('.card');
+
+    // Loop over every card and attach a click listener
+    cards.forEach(function(card) {
+      card.addEventListener('click', function() {
+
+        // classList lets you add, remove, or toggle CSS classes
+        // toggle adds the class if it's missing, removes it if it's there
+        card.classList.toggle('flipped');
+
+      });
+    });
+  </script>
+
 </body>
 </html>
